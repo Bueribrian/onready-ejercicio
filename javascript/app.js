@@ -2,7 +2,7 @@ window.onload = () => {
     APP.displayCarsByMaxPrice()
     APP.getMostCheapestCar()
     APP.getMostExpensiveCar()
-    APP.searchCar('h');
+    APP.searchCar('t');
 }
 
 
@@ -16,7 +16,7 @@ function generateCar(marca, modelo, precio, puertas = 4, cilindrada = 120) {
 }
 
 const APP = {
-    // Atributos
+    
     carsArray: [
         new generateCar('Peugeot', '206', 250000, 4, 126),
         new generateCar('Honda', 'Titan', 60000, 5),
@@ -28,17 +28,19 @@ const APP = {
     ],
 
 
-    // Metodos
+    
     displayCarsByMaxPrice: function () {
         let result = this.carsArray.sort((a, b) => {
             if (a.precio < b.precio) {
                 return 1
             }
         })
+        // Imprimo la cantidad de autos del array
         console.log(`Autos - (${this.carsArray.length}) `)
 
+        // Imprimo cada auto con su modelo, puertas, precio etc...
         result.map(car => {
-            console.log(` - ${car.marca} - ${car.modelo} // puertas ${car.puertas} // precio $${car.precio} // ${car.cilindrada}c`)
+            console.log(`     - ${car.marca} - ${car.modelo} // puertas ${car.puertas} // precio $${car.precio} // ${car.cilindrada}c`)
         })
     },
 
@@ -48,7 +50,8 @@ const APP = {
                 return 1
             }
         })
-        return console.log(` Vehículo más caro:` + `%c ${result[0].marca} modelo ${result[0].modelo}`, 'color:blue;');
+        // retorno el vehiculo mas caro
+        return console.log(`Vehículo más caro:` + `%c ${result[0].marca} modelo: ${result[0].modelo}`, 'color:blue;');
     },
 
     getMostCheapestCar: function () {
@@ -57,13 +60,22 @@ const APP = {
                 return 1
             }
         })
-        return console.log(` Vehículo más barato:` + `%c ${result[0].marca} modelo ${result[0].modelo}`, 'color:blue;');
+        // retorno el vehiculos mas barato
+        return console.log(`Vehículo más barato:` + `%c ${result[0].marca} modelo: ${result[0].modelo}`, 'color:blue;');
     },
     searchCar: function (letter) {
-        console.log(` Auto buscado por la letra '${letter}':`)
+        // buscar  modelo de auto que tenga la  letra pedida
+        console.log(`Modelo de auto buscado que tenga la letra '${letter}':`)
+
         for (var i in this.carsArray) {
-            if (this.carsArray[i].marca[0].toLowerCase() == letter) {
-                console.log(`%c \  ${this.carsArray[i].marca} - Modelo ${this.carsArray[i].modelo}`, 'color:blue')
+            for(var j in this.carsArray[i].modelo){
+                
+                if (this.carsArray[i].modelo[j].toLowerCase() == letter) {
+                    console.log(`%c \  ${this.carsArray[i].marca} - Modelo ${this.carsArray[i].modelo}`, 'color:blue')
+                }else if(!this.carsArray[i].modelo[j].toLowerCase() == letter) {
+                    console.log('no hay')
+                }
+
             }
         }
     }
