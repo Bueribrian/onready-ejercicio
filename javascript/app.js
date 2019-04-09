@@ -1,81 +1,93 @@
-window.onload = () => {
-    APP.displayCarsByMaxPrice()
-    APP.getMostCheapestCar()
-    APP.getMostExpensiveCar()
-    APP.searchCar('t');
-}
 
-
-
-function generateCar(marca, modelo, precio, puertas = 4, cilindrada = 120) {
-    this.marca = marca,
+class Vehicle {
+    constructor(marca, modelo, precio) {
+        this.marca = marca,
         this.modelo = modelo,
-        this.puertas = puertas,
-        this.precio = precio,
-        this.cilindrada = cilindrada
+        this.precio = precio
+    }
 }
+
+class Bike extends Vehicle {
+    constructor(marca, modelo, precio, cilindrada) {
+        super(marca, modelo, precio)
+        this.cilindrada = cilindrada,
+        this.vehicle = 'bike'
+    }
+}
+
+class Car extends Vehicle {
+    constructor(marca, modelo, precio, puertas) {
+        super(marca, modelo, precio)
+        this.puertas = puertas,
+        this.vehicle = 'car'
+    }
+}
+
 
 const APP = {
-    
-    carsArray: [
-        new generateCar('Peugeot', '206', 250000, 4, 126),
-        new generateCar('Honda', 'Titan', 60000, 5),
-        new generateCar('Fiat', '500L', 60000, 5),
-        new generateCar('Ford', 'Fiesta', 100000),
-        new generateCar('Honda', 'Civic', 150000, 5),
-        new generateCar('Nissan', 'GT-R', 300000, 2),
-        new generateCar('Peugeot', '308', 220000, 4)
+    //LISTA DE VEHICULOS
+    vehiclesArray: [
+        new Car('Peugeot', '206', 250000, 4),
+        new Bike('Yamaha', 'YBR', 60000, 160),
+        new Car('Fiat', '500L', 60000, 5),
+        new Bike('Honda', 'Titan', 100000, 125),
+        new Car('Honda', 'Civic', 150000, 5, 200),
+        new Bike('Honda', 'BIZ', 30000, 125),
+        new Car('Nissan', 'GT-R', 400000, 4)
     ],
 
-
-    
-    displayCarsByMaxPrice: function () {
-        let result = this.carsArray.sort((a, b) => {
-            if (a.precio < b.precio) {
-                return 1
+    // DEVUELVE EL NUMERO CON COMA
+    toComma: function (number) {
+        let value = new Intl.NumberFormat().format(number)
+        return value;
+    },
+    // RETORNA LISTA DE VEHICULOS
+    displayCars: function (order) {
+        let result = this.vehiclesArray.sort((a, b) => {
+            if(order==='max'){
+                if (a.precio < b.precio) {
+                    return 1
+                }
+            }else{
+                if (a.precio > b.precio) {
+                    return 1
+                }
             }
         })
         // Imprimo la cantidad de autos del array
-        console.log(`Autos - (${this.carsArray.length}) `)
+        console.log(`Vehiculos - (${this.vehiclesArray.length}) \n`)
 
         // Imprimo cada auto con su modelo, puertas, precio etc...
-        result.map(car => {
-            console.log(`     - ${car.marca} - ${car.modelo} // puertas ${car.puertas} // precio $${car.precio} // ${car.cilindrada}c`)
+        result.map(vehicle => {
+            console.log(`     - ${vehicle.marca} - ${vehicle.modelo} // precio: $${this.toComma(vehicle.precio)} ${vehicle.vehicle === 'car' ? 'Puertas: ' + vehicle.puertas : 'Cilindrada: ' + vehicle.cilindrada + 'c'}`)
         })
     },
-
+    // RETORNAR VEHICULO MAS CARO
     getMostExpensiveCar: function () {
-        let result = this.carsArray.sort((a, b) => {
+        let result = this.vehiclesArray.sort((a, b) => {
             if (a.precio < b.precio) {
                 return 1
             }
         })
-        // retorno el vehiculo mas caro
-        return console.log(`Vehículo más caro:` + `%c ${result[0].marca} modelo: ${result[0].modelo}`, 'color:blue;');
+        
+        return console.log(`Vehículo más caro:` + ` ${result[0].marca} - ${result[0].modelo} // precio: $${this.toComma(result[0].precio)} `);
     },
-
-    getMostCheapestCar: function () {
-        let result = this.carsArray.sort((a, b) => {
+    // RETORNAR VEHICULO MAS BARATO
+    getCheapestCar: function () {
+        let result = this.vehiclesArray.sort((a, b) => {
             if (a.precio > b.precio) {
                 return 1
             }
         })
-        // retorno el vehiculos mas barato
-        return console.log(`Vehículo más barato:` + `%c ${result[0].marca} modelo: ${result[0].modelo}`, 'color:blue;');
+        return console.log(`Vehículo más barato:` + ` ${result[0].marca}  ${result[0].modelo} // precio: $${this.toComma(result[0].precio)} `);
     },
+    // RETORNA MODELO DE AUTO POR LETRA
     searchCar: function (letter) {
-        // buscar  modelo de auto que tenga la  letra pedida
-        console.log(`Modelo de auto buscado que tenga la letra '${letter}':`)
-
-        for (var i in this.carsArray) {
-            for(var j in this.carsArray[i].modelo){
-                
-                if (this.carsArray[i].modelo[j].toLowerCase() == letter) {
-                    console.log(`%c \  ${this.carsArray[i].marca} - Modelo ${this.carsArray[i].modelo}`, 'color:blue')
-                }else if(!this.carsArray[i].modelo[j].toLowerCase() == letter) {
-                    console.log('no hay')
-                }
-
+        console.log(`Modelo de Vehiculo buscado que tenga la letra '${letter}':`)
+        for (var i in this.vehiclesArray) {
+            let vehicle = this.vehiclesArray[i].modelo.toLowerCase()
+            if (vehicle.includes(letter)) {
+                console.log(this.vehiclesArray[i].marca, this.vehiclesArray[i].modelo)
             }
         }
     }
@@ -84,3 +96,12 @@ const APP = {
 
 
 
+
+// Iniciando....
+APP.displayCars('max')
+console.log('\n')
+APP.getMostExpensiveCar()
+console.log('\n')
+APP.getCheapestCar()
+console.log('\n')
+APP.searchCar('r');
